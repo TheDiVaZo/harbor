@@ -7,6 +7,8 @@ import xyz.nkomarn.harbor.Harbor;
 
 import java.util.List;
 
+import static xyz.nkomarn.harbor.util.HexUtil.translateHexColorCodes;
+
 public class Config {
     private final Harbor harbor;
 
@@ -38,7 +40,7 @@ public class Config {
      */
     @NotNull
     public String getPrefix() {
-        return ChatColor.translateAlternateColorCodes('&', getString("messages.miscellaneous.chat-prefix"));
+        return translateHexColorCodes(ChatColor.translateAlternateColorCodes('&', getString("messages.miscellaneous.chat-prefix")));
     }
 
     /**

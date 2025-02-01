@@ -2,11 +2,11 @@ package xyz.nkomarn.harbor.util;
 
 import com.google.common.base.Enums;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -21,8 +21,14 @@ import xyz.nkomarn.harbor.Harbor;
 import xyz.nkomarn.harbor.task.Checker;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static net.md_5.bungee.api.ChatColor.COLOR_CHAR;
+import static xyz.nkomarn.harbor.util.HexUtil.translateHexColorCodes;
 
 public class Messages implements Listener {
+    private final Pattern HEX_PATTERN = Pattern.compile("&(#[A-Fa-f0-9]{6})");
 
     private final Harbor harbor;
     private final Config config;
@@ -136,18 +142,18 @@ public class Messages implements Listener {
     @NotNull
     public String prepareMessage(@NotNull World world, @NotNull String message) {
         Checker checker = harbor.getChecker();
-        return ChatColor.translateAlternateColorCodes('&', message
+        return translateHexColorCodes(ChatColor.translateAlternateColorCodes('&', message
                 .replace("[sleeping]", String.valueOf(checker.getSleepingPlayers(world).size()))
                 .replace("[players]", String.valueOf(checker.getPlayers(world)))
                 .replace("[needed]", String.valueOf(checker.getSkipAmount(world)))
-                .replace("[more]", String.valueOf(checker.getNeeded(world))));
+                .replace("[more]", String.valueOf(checker.getNeeded(world)))));
     }
 
     @NotNull
     public String prepareMessage(@NotNull Player player, @NotNull String message) {
-        String output = ChatColor.translateAlternateColorCodes('&', message
+        String output = translateHexColorCodes(ChatColor.translateAlternateColorCodes('&', message
                 .replace("[player]", player.getName())
-                .replace("[displayname]", player.getDisplayName()));
+                .replace("[displayname]", player.getDisplayName())));
 
         if (papiPresent) {
             output = PlaceholderAPI.setPlaceholders(player, output);
